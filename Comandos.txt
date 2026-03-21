@@ -1,0 +1,126 @@
+Crear un nuevo proyecto:
+
+dotnet new webapi
+
+Crear un gitIgnore
+
+dotnet new gitignore
+
+escribir en el gitignore appsettings.json (En cualquier lado)
+
+Crear las siguientes carpetas
+
+└── 📁 Src → carpeta donde se guardara todo el contenido 
+    ├── 📁 Controller → Carpeta para guardar los controladores por servicio
+    ├── 📁 Db → Carpeta dirigida a generar la base de datos | migraciones | Seeder 
+    ├── 📁 Dtos → Carpeta dirigida a guardar los DTOs, ampliable a conveniencia 
+    ├── 📁 Model → Modelos bases obtenidos de la ERS
+    ├── 📁 Services → Servicios para manejar la logica de negocio
+    │   └── 📁 Interfaces → Interfaces para crear la acciones de la logica de negocio
+    └── 📁 Utils → Carpeta para guardar funciones o acciones repetitivas y convenientes.
+
+Para el requerimiento Número 1 realizaremos los siguientes pasos.
+
+1.- Instalar dependecias y crear la conexión con neo.
+
+Instalar dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
+
+Ir a la URl https://neon.com/
+
+Iniciar sesión y crear un proyecto (1 por equipo)
+
+una vez iniciado sesión, dirigirse a dashboard → Connect, Cambiar connection String a .Net y por ultimo revelar la contraseña y copiarla.
+
+una vez realizado los pasos anteriores
+
+dirigirse a appsettings.json y al ultimo apartado agregar una , y la siguiente sentencia.
+
+"ConnectionStrings": {
+    "DefaultConnection": "Aqui va lo copiado de neon"
+  }
+
+Una vez realizado esto Crearemos la base de datos.
+
+2.- Crear modelos y base de datos.
+
+Crear los archivos Role.cs y Model.cs dentro de la carpeta de Model
+
+Crearemos el las entidades de la base de datos en el la carpeta Db, en el archivo ContextDb.cs
+
+Para continuar se deben instalar herramientas para crear las migraciones las cuales son
+
+dotnet add package Microsoft.EntityFrameworkCore.Design
+
+una vez realizado lo anterior, se comenzara a crear el Program.cs donde generaremos la migraciones (Base de datos)
+
+Para crear las primeras migraciones se debe de utilizar el siguiente comando
+
+        Este nombre cambiara dependiendo de las acciones que agregen 
+                            ↓
+dotnet ef migrations add InitialCreate -o Src/Db/Migrations
+
+luego: 
+
+dotnet ef database update
+
+y para finalizar, se pueden ver los cambios realizados en la tablas de neon.
+
+
+                          
+3.- Crearemos los Dtos para tranferir los datos a la lógica de negocio.
+
+Primero crearemos las clases para tranferir los datos a núestro modelos bases, es decir, los dtos.
+Dentro de los Dtos separaremos por logicas o por modelo, en mi caso, lo utilizare por modelos.
+
+
+└── 📁 Src 
+    ├── 📁 Dtos
+        └── 📁 Users
+            └── UserDtos.Cs
+
+4.-  Crearemos los servicios para trabajar con la lógica de negocio.
+
+Primero crearemos la clase de Auth para comenzar a trabajar la lógica de negocio
+Estas clase para la interfaces deben de tener una "I" por delante para identificarla, por ejemplo IAuthServices.cs
+
+Para la implementación de la interface se creara el mismo archivo fuera del la carpeta interface y sin "I", de la siguiente manera AuthServices.cs
+
+└── 📁 Src 
+    ├── 📁 Services
+        ├── 📁 Interfaces
+        │   └── IAuthServices.Cs
+        └── AuthServices.Cs    
+5.- Instalaremos paquetes necesarios para el proceso de lógin, los cuales son:
+
+dotnet add package BCrypt.Net-Next → Para poder encriptar contraseñas y datos
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer → Para generar Tokens o string firmados por nuestra api.
+
+Ahora actualizaremos el program.cs para poder validar los paquetes que acabamos de instlar.
+
+y para finalizar, actualizaremos el appsettings.json para terminar la configuración de dichos elementos.
+
+,
+  "Jwt":{
+    "Key": "",
+    "Issuer": "",
+    "Audience": "",
+    "ExpireMinutes": 0
+  }
+
+Antes de pasar a la logica de negocio, crearemos la función para generar token validos para el inicio de sesión.
+Esta estará en Utils
+
+└── 📁 Src 
+    ├── 📁 Utils
+        └── GenerateToken.Cs    
+Luego de realizar todo este proceso podemos completar el inicio de sesión correspondiente donde trabajaremos en la carpeta services.
+
+6.- Para finalizar crearemos el Controller donde responderemos al la solicitud generada
+
+en controller crearemos AuthController.cs
+Luego de crear el controller, realizaremos, lo haremos publico mediante la implementación en el program.cs
+
+Para finalizar y probar debemos ingresar datos por lo cual crearemos un seeder con la información dentro de la carpeta Db.
+
+Esta la inicializaremos en program.cs, se verifica en neon y terminamos
+

@@ -1,0 +1,11 @@
+@ProyectoDivine_HostAddress = http://localhost:5258
+POST {{ProyectoDivine_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@divine.cl",
+    "password": "admin123"
+}
+
+
+###
