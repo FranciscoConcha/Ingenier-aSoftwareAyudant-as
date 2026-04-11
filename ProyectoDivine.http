@@ -1,4 +1,4 @@
-@ProyectoDivine_HostAddress = http://localhost:5258
+@ProyectoDivine_HostAddress = https://ingenier-asoftwareayudant-as-3.onrender.com
 POST {{ProyectoDivine_HostAddress}}/api/auth/
 Content-Type: application/json
 
