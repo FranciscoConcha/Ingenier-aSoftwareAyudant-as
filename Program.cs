@@ -6,10 +6,15 @@ using ProyectoDivine.Src.Services.interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080);
+});
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
 
 // punto 6 de Readme
 // Implementa los controladores y los hace publico para que puedan ser accedidos desde el exterior de la aplicación,
