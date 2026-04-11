@@ -34,7 +34,7 @@ public static class GenerateToken
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Name, $"{user.Name} {user.LastName}"),
-            new Claim(ClaimTypes.Role, user.Role.Name) 
+            new Claim(ClaimTypes.Role, user.Role.Name)
         };
         // Creación del token JWT utilizando las reclamaciones, las credenciales de firma, y la configuración de emisor, audiencia y expiración.
         var token = new JwtSecurityToken(

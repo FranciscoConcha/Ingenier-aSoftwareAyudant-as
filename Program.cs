@@ -22,6 +22,26 @@ builder.Services.AddScoped<IAuthServices, AuthServices>();
 // Punto 2 de Readme
 // Variable par obtener la cadena de conexión desde appsettings.json 
 var ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+/// Configuración de CORS para permitir solicitudes desde el origen "http://localhost:5173",
+/// lo que es útil para permitir que una aplicación frontend (como una aplicación React) pueda 
+/// comunicarse con esta API sin restricciones de origen cruzado, 
+/// permitiendo así el intercambio de datos entre el frontend y el backend de manera segura y controlada.
+builder.Services.AddCors(options =>
+{
+    // Configuración de una política de CORS llamada "AllowAll" 
+    // que permite solicitudes desde el origen "http://localhost:5173",
+    options.AddPolicy("AllowAll", policy =>
+    {
+        // Configuración de la política de CORS para permitir solicitudes desde el origen "http://localhost:5173",
+        // permitiendo así que una aplicación frontend (como una aplicación React) pueda comunicarse con esta API 
+        // sin restricciones de origen cruzado,
+        policy.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 // Punto 2 de Readme
 // Configuración del contexto de la base de datos utilizando Entity Framework Core y PostgreSQL.
 builder.Services.AddDbContext<ContextDb>(options =>
@@ -66,6 +86,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -94,6 +115,7 @@ using (var scope = app.Services.CreateScope())
 // Eso redirecciona a HTTPS, maneja autenticación y autorización, y mapea los controladores. Luego inicia la aplicación.
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

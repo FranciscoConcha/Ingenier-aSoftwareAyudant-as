@@ -34,43 +34,49 @@ public class AuthServices(ContextDb contextDb, IConfiguration config) : IAuthSer
     /// <param name="loginDto"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public Task<LoginResponse> Login(LoginDto loginDto)
+    public async Task<LoginResponse> Login(LoginDto loginDto)
     {
         try
         {   
             // Búsqueda del usuario en la base de datos utilizando el correo electrónico proporcionado en el LoginDto.
             // Se incluye la entidad Role para obtener la información del rol del usuario durante la autenticación.
             // Si no se encuentra el usuario o la contraseña no coincide, se devuelve una respuesta indicando que las credenciales son incorrectas.
-            var user = _contextDb.Users
+            var user = await _contextDb.Users
                 .Include(u => u.Role)
-                .FirstOrDefault(u=> u.Email == loginDto.Email);
+                .FirstOrDefaultAsync(u=> u.Email == loginDto.Email);
+
             // Verificación de las credenciales del usuario. Si el usuario no existe o la contraseña no coincide, se devuelve una respuesta de error.
             if(user == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password))
             {
                 // Retorno de una respuesta indicando que el correo electrónico o la contraseña son incorrectos.
-                return Task.FromResult(new LoginResponse
+                return new LoginResponse
                 {
                     Success = false,
                     Message = "Correo electrónico o contraseña incorrectos",
                     Data = null
-                });
+                };
             }
+
             // Verificación del estado del usuario. Si el usuario está inactivo, se devuelve una respuesta indicando que el usuario está inactivo y que debe contactar al administrador.
             if (!user.Status)
             {
                 // Retorno de una respuesta indicando que el usuario está inactivo y que debe contactar al administrador.
-                return Task.FromResult(new LoginResponse
+                return new LoginResponse
                 {
                     Success = false,
                     Message = "Usuario inactivo, por favor contacte al administrador",
                     Data = null
-                });
+                };
             }
+
+            user.Name = "Francisco2 ";
+
+            await _contextDb.SaveChangesAsync();
             // Si las credenciales son correctas y el usuario está activo, 
             // se genera un token JWT para el usuario utilizando la clase GenerateToken, 
             // y se devuelve una respuesta indicando que el inicio de sesión fue exitoso, 
             // junto con los datos relevantes del usuario autenticado.
-            return Task.FromResult(new LoginResponse
+            return new LoginResponse
             {
                 Success = true,
                 Message = "Login exitoso",
@@ -83,16 +89,16 @@ public class AuthServices(ContextDb contextDb, IConfiguration config) : IAuthSer
                     Email = user.Email,
                     Role = user.Role.Name
                 }
-            });
+            };
         }
         catch (Exception ex)
         {
-            return Task.FromResult(new LoginResponse
+            return new LoginResponse
             {
                 Success = false,
                 Message = $"Error durante el login: {ex.Message}",
                 Data = null
-            });
+            };
         }
     }
         

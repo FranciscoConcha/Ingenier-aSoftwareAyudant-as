@@ -31,14 +31,25 @@ public class AuthController(IAuthServices authServices) : ControllerBase
     /// y utiliza el servicio de autenticación para procesar la solicitud.
     /// [FromBody] indica que el objeto LoginDto se debe deserializar a partir del cuerpo de la solicitud HTTP,
     /// lo que permite que el cliente envíe las credenciales del usuario en formato JSON
-    [HttpPost("login")]
+    [HttpPost("")]
     public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
     {
-        var response = await _authServices.Login(loginDto);
-        if (!response.Success)
+        try
         {
-            return BadRequest(response);
-        }
-        return Ok(response);
-    }
+            var response = await _authServices.Login(loginDto);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }catch(Exception ex)
+        {
+            return StatusCode(500, new LoginResponse
+            {
+                Success = false,
+                Message = $"Error durante el login: {ex.Message}",
+                Data = null
+            });
+        }   
+    }    
 }

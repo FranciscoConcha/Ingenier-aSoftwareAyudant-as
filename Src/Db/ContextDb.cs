@@ -33,6 +33,7 @@ public class ContextDb(DbContextOptions<ContextDb> options) : DbContext(options)
             .HasOne(u => u.Role)
             .WithMany(r => r.Users)
             .HasForeignKey(u => u.RoleId);
+
         modelBuilder.Entity<Role>()
             .HasMany(u=>u.Users)
             .WithOne(r=>r.Role)
