@@ -22,7 +22,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IAuthServices, AuthServices>();
 // Punto 2 de Readme
 // Variable par obtener la cadena de conexión desde appsettings.json 
-var ConnectionString = builder.Configuration.GetConnectionString("DEFAULT_CONNECTION_STRING")!;
+var ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
 /// Configuración de CORS para permitir solicitudes desde el origen "http://localhost:5173",
 /// lo que es útil para permitir que una aplicación frontend (como una aplicación React) pueda 
 /// comunicarse con esta API sin restricciones de origen cruzado, 
@@ -69,12 +69,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             // Validación de la clave de firma del token JWT.
             ValidateIssuerSigningKey = true,
             // Configuración del emisor válido del token JWT, obtenido desde appsettings.json.
-            ValidIssuer = builder.Configuration["JWT_ISSUER"],
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
             // Configuración de la audiencia válida del token JWT, obtenida desde appsettings.json.
-            ValidAudience = builder.Configuration["JWT_AUDIENCE"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
             // Configuración de la clave de firma del token JWT, utilizando una clave simétrica obtenida desde appsettings.json.
             IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
-                System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"]!))
+                System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
         };
         options.Events = new JwtBearerEvents
         {
