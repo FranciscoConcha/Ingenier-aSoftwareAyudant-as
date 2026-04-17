@@ -20,7 +20,8 @@ builder.Services.AddControllers();
 // utilizando la clase AuthServices como implementación concreta, 
 //lo que permite que la lógica de autenticación esté disponible para ser utilizada en los controladores y otras
 builder.Services.AddScoped<IAuthServices, AuthServices>();
-
+builder.Services.AddScoped<ICloudinaryServices, CloudinaryServices>();
+builder.Services.AddScoped<IFuntionServices, FuntionServices>();
 
 // Punto 2 de Readme
 // Variable par obtener la cadena de conexión desde appsettings.json 
