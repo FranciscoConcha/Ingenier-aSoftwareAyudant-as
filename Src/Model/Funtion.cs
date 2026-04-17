@@ -11,5 +11,5 @@ public class Funtion
     public string DateFunction {get;set;} = null!;
     public string TimeFunction {get;set;} = null!;
     public bool State {get;set;}
-    public string Image {get;set;} = null!;
+    public string? Image {get;set;}
 }
