@@ -15,7 +15,7 @@ public class CreateFuntionData
     public string DateFunction {get;set;} = null!;
     public string TimeFunction {get;set;} = null!;
     public bool State {get;set;}
-    public string ImageUrL {get;set;} = null!;
+    public string ImageUrl {get;set;} = null!;
 }
 
 public class CreateFuntionResponse
