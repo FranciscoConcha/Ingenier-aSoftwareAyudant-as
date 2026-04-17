@@ -1,13 +1,13 @@
-using Microsoft.EntityFrameworkCore;
 using ProyectoDivine.Src.Db;
 using ProyectoDivine.Src.Dtos.Funtion;
 using ProyectoDivine.Src.Services.interfaces;
+using ProyectoDivine.Src.Model;
 
 namespace ProyectoDivine.Src.Services;
 
 public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb contextDb) : IFuntionServices
 {
-    public readonly DbContext _dbContext = contextDb;
+    public readonly ContextDb _contextDb = contextDb;
     public readonly ICloudinaryServices _cloudinaryServices = cloudinaryServices;
     public async Task<CreateFuntionResponse> CreateFuntionAsync(CreateFuntion request)
     {
@@ -32,23 +32,32 @@ public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb c
             {
                 ResponseImageUrl = string.Empty;
             }
-            var funtion = new CreateFuntionData
+            var funtion = new Funtion
             {
-                
                 Name = request.Name,
                 Description = request.Description,
                 DateFunction = request.DateFunction,
                 TimeFunction = request.TimeFunction,
-                State = true, // Asumiendo que la función se crea en estado activo
-                ImageUrl = ResponseImageUrl
+                State = true,
+                Image = ResponseImageUrl
             };
-            await _dbContext.AddAsync(funtion);
-            await _dbContext.SaveChangesAsync();
+            await _contextDb.Functions.AddAsync(funtion);
+            await _contextDb.SaveChangesAsync();
+            funtion.Id = funtion.Id;
             return new CreateFuntionResponse
             {
                 Message = "Función creada exitosamente",
                 Success = true,
-                Data = funtion
+                Data = new CreateFuntionData
+                {
+                    Id = funtion.Id,
+                    Name = funtion.Name,
+                    Description = funtion.Description,
+                    DateFunction = funtion.DateFunction,
+                    TimeFunction = funtion.TimeFunction,
+                    State = funtion.State,
+                    ImageUrl = funtion.Image ?? string.Empty
+                }
             };
         }
         catch (Exception ex)
