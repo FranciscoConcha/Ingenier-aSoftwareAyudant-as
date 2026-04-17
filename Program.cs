@@ -27,6 +27,7 @@ var ConnectionString = builder.Configuration.GetConnectionString("DefaultConnect
 /// lo que es útil para permitir que una aplicación frontend (como una aplicación React) pueda 
 /// comunicarse con esta API sin restricciones de origen cruzado, 
 /// permitiendo así el intercambio de datos entre el frontend y el backend de manera segura y controlada.
+
 builder.Services.AddCors(options =>
 {
     // Configuración de una política de CORS llamada "AllowAll" 
@@ -36,12 +37,13 @@ builder.Services.AddCors(options =>
         // Configuración de la política de CORS para permitir solicitudes desde el origen "http://localhost:5173",
         // permitiendo así que una aplicación frontend (como una aplicación React) pueda comunicarse con esta API 
         // sin restricciones de origen cruzado,
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5173","https://devcloud-frontend2.onrender.com")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
     });
 });
+
 
 // Punto 2 de Readme
 // Configuración del contexto de la base de datos utilizando Entity Framework Core y PostgreSQL.
