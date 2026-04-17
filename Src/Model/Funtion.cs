@@ -10,5 +10,6 @@ public class Funtion
     public string Description {get;set;} = null!;
     public string DateFunction {get;set;} = null!;
     public string TimeFunction {get;set;} = null!;
+    public bool State {get;set;}
     public string Image {get;set;} = null!;
 }
