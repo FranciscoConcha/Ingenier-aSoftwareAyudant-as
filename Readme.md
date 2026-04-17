@@ -193,7 +193,7 @@ Dentro de `Dtos` → `Funtion` (Carpeta creada), se debe de agregar el createFun
 
 ### 7.4 Configurar Cloudinary para las imagenes
 
-#### Página de cloudinary
+#### 7.4.1 Página de cloudinary y obtener datos
 
 Dirigirse a https://cloudinary.com/ y registrarse
 
@@ -214,7 +214,14 @@ para finalizar, en al Appsettings.json se debe de actualizar con
 ```
 Rellenandolo con sus datos asociados.
 
-Para finalizar, installar cloudinary en proyecto.
+#### 7.4.2 Instalar cloudinary en el proyecto
+Instalar con el siguiente comando ↓
+
 ```Bash
 dotnet add package Cloudinary
+dotnet add package CloudinaryDotNet
 ```
+
+
+
+
