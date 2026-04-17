@@ -221,6 +221,31 @@ Instalar con el siguiente comando ↓
 dotnet add package CloudinaryDotNet
 ```
 
+#### 7.4.3 Creación de servicio con los elementos para la utilización de imagenes de Cloudinary
 
+Realizar o seguir el procedimiento descrito en `CloudinaryServices` para ver los datos.
+
+#### 7.4.4 Public servicio
+
+Realizar la publicación del servicicio en el "Main" O `Program.cs` con el siguiente linea
+
+builder.Services.AddScoped<ICloudinaryServices, CloudinaryServices>();
+
+### 7.5 Creación de servicio e interfaces para funcion
+
+Primero se debe de crear la interfaces que respete la creación de un servicio dentro del programa, esta se ubicara en la carpeta `Interfaces` dentro de la carpeta `Services`, el contenido de varia con respecto a las demás interfaces.
+
+Para la implementación del esta interfaces, crearemos su servicio, lo que agregaremos como parametro al contructor son: El contexto de la base de datos y el servicio de cloudinary.
+Dentro de esta implementaremos la interface correspondiente de cloudinary
+
+### 7.6 Crear controllador
+Seguiremos el procedimiento adecuado para la creación de un controlador en especifico, dentro de esta solo tendremos los elementos ya vistos del controloador de `AuthController`, Lo nuevo serán las implementación `Authorize(Roles = "Admin")` que nos limitara el uso del controlador a las personas que tengan solo administrador.
+
+### 7.5 Publicar Servicio de interfaces.
+Se debe de replicar el paso `7.4.4` donde publicamos el servicio de cloudinary pero para la intercaes y servicio de funcion
+
+### 7.6 Prueba en POSTMAN
+
+La prueba en postman se debe de realizar con el formato de `Body` → `Form-Data` donde agregaremos los datos del dto `CreateFuntion`, en especifico, la imagen debe de ser un tipo `File`, además de la autorización ya vista
 
 
