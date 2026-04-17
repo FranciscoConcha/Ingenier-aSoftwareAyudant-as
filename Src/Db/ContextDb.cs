@@ -12,6 +12,7 @@ public class ContextDb(DbContextOptions<ContextDb> options) : DbContext(options)
 {
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Role> Roles { get; set; } = null!;
+    public DbSet<Funtion> Functions { get; set; } = null!;
 
 
 /// <summary>
