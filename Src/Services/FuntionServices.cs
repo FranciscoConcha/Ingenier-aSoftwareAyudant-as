@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
+using ProyectoDivine.Src.Db;
 using ProyectoDivine.Src.Dtos.Funtion;
 using ProyectoDivine.Src.Services.interfaces;
 
 namespace ProyectoDivine.Src.Services;
 
-public class FuntionServices(ICloudinaryServices cloudinaryServices, DbContext dbContext) : IFuntionServices
+public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb contextDb) : IFuntionServices
 {
-    public readonly DbContext _dbContext = dbContext;
+    public readonly DbContext _dbContext = contextDb;
     public readonly ICloudinaryServices _cloudinaryServices = cloudinaryServices;
     public async Task<CreateFuntionResponse> CreateFuntionAsync(CreateFuntion request)
     {

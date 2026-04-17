@@ -218,7 +218,6 @@ Rellenandolo con sus datos asociados.
 Instalar con el siguiente comando ↓
 
 ```Bash
-dotnet add package Cloudinary
 dotnet add package CloudinaryDotNet
 ```
 
