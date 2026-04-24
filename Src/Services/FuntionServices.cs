@@ -39,7 +39,7 @@ public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb c
                 Description = request.Description,
                 DateFunction = request.DateFunction,
                 TimeFunction = request.TimeFunction,
-                State = true,
+                State = false,
                 Image = ResponseImageUrl,
                 // Generar un UUID compacto sin guiones para la validación de la función
                 ValidateFuntion = miUuid.ToString("N")
