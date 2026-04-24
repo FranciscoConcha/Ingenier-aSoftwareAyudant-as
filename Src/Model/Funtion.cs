@@ -12,4 +12,5 @@ public class Funtion
     public string TimeFunction {get;set;} = null!;
     public bool State {get;set;}
     public string? Image {get;set;}
+    public string ValidateFuntion {get;set;} = string.Empty;
 }
