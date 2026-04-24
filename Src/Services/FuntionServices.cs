@@ -5,10 +5,11 @@ using ProyectoDivine.Src.Model;
 using System;
 namespace ProyectoDivine.Src.Services;
 
-public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb contextDb) : IFuntionServices
+public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb contextDb, ISendGridEmailServices sendGridEmailServices) : IFuntionServices
 {
     public readonly ContextDb _contextDb = contextDb;
     public readonly ICloudinaryServices _cloudinaryServices = cloudinaryServices;
+    public readonly ISendGridEmailServices _sendGridEmailServices = sendGridEmailServices;
     public async Task<CreateFuntionResponse> CreateFuntionAsync(CreateFuntion request)
     {
         string ResponseImageUrl = string.Empty;
@@ -46,6 +47,26 @@ public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb c
             };
             await _contextDb.Functions.AddAsync(funtion);
             await _contextDb.SaveChangesAsync();
+            var response = await _sendGridEmailServices.SendEmailAsync("Francisco.concha.urquieta@gmail.com","Prueba",funtion.Name, funtion.ValidateFuntion);
+            if(!response)
+            {
+                Console.WriteLine("Error al enviar el correo electrónico de validación");
+                return new CreateFuntionResponse
+                {
+                    Message = "Función creada, pero error al enviar el correo electrónico de validación",
+                    Success = true,
+                    Data = new CreateFuntionData
+                    {
+                        Id = funtion.Id,
+                        Name = funtion.Name,
+                        Description = funtion.Description,
+                        DateFunction = funtion.DateFunction,
+                        TimeFunction = funtion.TimeFunction,
+                        State = funtion.State,
+                        ImageUrl = funtion.Image ?? string.Empty
+                    }
+                };
+            }
             return new CreateFuntionResponse
             {
                 Message = "Función creada exitosamente",
