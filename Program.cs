@@ -22,6 +22,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IAuthServices, AuthServices>();
 builder.Services.AddScoped<ICloudinaryServices, CloudinaryServices>();
 builder.Services.AddScoped<IFuntionServices, FuntionServices>();
+builder.Services.AddScoped<ISendGridEmailServices, SendGridEmailServices>();
 
 // Punto 2 de Readme
 // Variable par obtener la cadena de conexión desde appsettings.json 
