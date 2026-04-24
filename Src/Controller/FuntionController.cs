@@ -10,7 +10,7 @@ public class FuntionController(IFuntionServices funtionServices): ControllerBase
 {
     private readonly IFuntionServices _funtionServices = funtionServices;
 
-    [HttpPost("")]
+    [HttpPost("Register")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateFuntion([FromForm] CreateFuntion request)
     {

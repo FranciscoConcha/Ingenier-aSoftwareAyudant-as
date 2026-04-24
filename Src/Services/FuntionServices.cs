@@ -2,7 +2,7 @@ using ProyectoDivine.Src.Db;
 using ProyectoDivine.Src.Dtos.Funtion;
 using ProyectoDivine.Src.Services.interfaces;
 using ProyectoDivine.Src.Model;
-
+using System;
 namespace ProyectoDivine.Src.Services;
 
 public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb contextDb) : IFuntionServices
@@ -12,6 +12,7 @@ public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb c
     public async Task<CreateFuntionResponse> CreateFuntionAsync(CreateFuntion request)
     {
         string ResponseImageUrl = string.Empty;
+        Guid miUuid = Guid.NewGuid();
         try
         {
             if(request.Image != null)
@@ -39,11 +40,12 @@ public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb c
                 DateFunction = request.DateFunction,
                 TimeFunction = request.TimeFunction,
                 State = true,
-                Image = ResponseImageUrl
+                Image = ResponseImageUrl,
+                // Generar un UUID compacto sin guiones para la validación de la función
+                ValidateFuntion = miUuid.ToString("N")
             };
             await _contextDb.Functions.AddAsync(funtion);
             await _contextDb.SaveChangesAsync();
-            funtion.Id = funtion.Id;
             return new CreateFuntionResponse
             {
                 Message = "Función creada exitosamente",
@@ -69,6 +71,6 @@ public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb c
                 Data = null!
             };
         }
-        throw new NotImplementedException();
     }
 }
+
