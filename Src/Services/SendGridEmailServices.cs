@@ -39,12 +39,15 @@ public class SendGridEmailServices(IConfiguration configuration) : ISendGridEmai
             msg.SetTemplateData(new
             {
                 nombre_funcion = nombre_funcion,
-                validacion_string = validacion_string
+                validacion_string = validacion_string,
+                subject = subject
             });
+            
+
             // Enviar el correo electrónico utilizando el cliente de SendGrid y registrar la respuesta
             var response = await client.SendEmailAsync(msg);
             // Registrar el resultado del envío del correo electrónico para depuración
-            Console.WriteLine($"Correo electrónico enviado a {toEmail} con estado: {response.StatusCode} y {response.Body.ReadAsStringAsync().Result}");
+            Console.WriteLine($"Correo electrónico enviado a {toEmail} con estado: {response.StatusCode} y {response.Body.ReadAsStringAsync().Result} con asusnto {subject}");
             // Devolver true si el envío del correo electrónico fue exitoso (código de estado 2xx), de lo contrario, devolver false
             return response.IsSuccessStatusCode;
         }
@@ -53,7 +56,6 @@ public class SendGridEmailServices(IConfiguration configuration) : ISendGridEmai
             Console.WriteLine($"Error al enviar el correo electrónico: {ex.Message}");
             return false;
         }
-        throw new NotImplementedException();
     }
 };
 
