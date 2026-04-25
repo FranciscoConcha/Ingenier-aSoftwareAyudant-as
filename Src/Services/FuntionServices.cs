@@ -47,7 +47,7 @@ public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb c
             };
             await _contextDb.Functions.AddAsync(funtion);
             await _contextDb.SaveChangesAsync();
-            var response = await _sendGridEmailServices.SendEmailAsync("Francisco.concha.urquieta@gmail.com","Prueba",funtion.Name, funtion.ValidateFuntion);
+            var response = await _sendGridEmailServices.SendEmailAsync("Francisco.concha.urquietaxd@gmail.com","Prueba",funtion.Name, funtion.ValidateFuntion);
             if(!response)
             {
                 Console.WriteLine("Error al enviar el correo electrónico de validación");

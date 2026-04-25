@@ -3,9 +3,8 @@ using SendGrid.Helpers.Mail;
 
 namespace ProyectoDivine.Src.Services;
 
-public class SendGridEmailServices(ISendGridEmailServices sendGridEmailServices, IConfiguration configuration) : ISendGridEmailServices
+public class SendGridEmailServices(IConfiguration configuration) : ISendGridEmailServices
 {
-    private readonly ISendGridEmailServices _sendGridEmailServices = sendGridEmailServices;
     private readonly IConfiguration _configuration = configuration;
 
     public async Task<bool> SendEmailAsync(string toEmail, string subject, string nombre_funcion, string validacion_string)
@@ -32,6 +31,7 @@ public class SendGridEmailServices(ISendGridEmailServices sendGridEmailServices,
                 validacion_string = validacion_string
             });
             var response = await client.SendEmailAsync(msg);
+            Console.WriteLine($"Correo electrónico enviado a {toEmail} con estado: {response.StatusCode} y {response.Body.ReadAsStringAsync().Result}");
             return response.IsSuccessStatusCode;
         }
         catch (Exception ex)
