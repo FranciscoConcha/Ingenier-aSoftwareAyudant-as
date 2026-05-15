@@ -62,7 +62,5 @@ public class ContextDb(DbContextOptions<ContextDb> options) : DbContext(options)
             .HasMany(r => r.SelectedSeats)
             .WithMany()
             .UsingEntity(j => j.ToTable("ReservationSeats"));
-    }
-    
-    
+    }   
 }
