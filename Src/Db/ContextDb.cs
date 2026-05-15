@@ -13,6 +13,8 @@ public class ContextDb(DbContextOptions<ContextDb> options) : DbContext(options)
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Role> Roles { get; set; } = null!;
     public DbSet<Funtion> Functions { get; set; } = null!;
+    public DbSet<Seat> Seats { get; set; } = null!;
+    public DbSet<Reservation> Reservations { get; set; } = null!;
 
 
 /// <summary>
@@ -39,5 +41,28 @@ public class ContextDb(DbContextOptions<ContextDb> options) : DbContext(options)
             .HasMany(u=>u.Users)
             .WithOne(r=>r.Role)
             .HasForeignKey(u=>u.RoleId);
+        
+        modelBuilder.Entity<Seat>()
+            .HasOne(s => s.Funtion)
+            .WithMany()
+            .HasForeignKey(s => s.FuntionId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Reservation>()
+            .HasOne(r => r.User)
+            .WithMany()
+            .HasForeignKey(r => r.UserId);
+
+        modelBuilder.Entity<Reservation>()
+            .HasOne(r => r.Funtion)
+            .WithMany()
+            .HasForeignKey(r => r.FuntionId);
+
+        modelBuilder.Entity<Reservation>()
+            .HasMany(r => r.SelectedSeats)
+            .WithMany()
+            .UsingEntity(j => j.ToTable("ReservationSeats"));
     }
+    
+    
 }
