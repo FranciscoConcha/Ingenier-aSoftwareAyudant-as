@@ -347,3 +347,125 @@ Se puede probar el servicio en Postman.
 En este caso, se modificó la función para que el estado cambie una vez que se genera un UUID aleatorio.
 
 
+## Ayudantía 7
+### 9.1 Verificación de datos de entrada
+Para verificar datos de entrada de manera rapida podemos realizarlo de la siguiente manera
+```csharp
+using System.ComponentModel.DataAnnotations;
+using ProyectoDivine.Src.Validators;
+
+namespace ProyectoDivine.Src.Dtos.Funtion;
+public class CreateFuntion
+{
+    [Required(ErrorMessage = "El nombre de la función es obligatorio.")]
+    public string Name {get;set;} = null!;
+}
+y para validaciones personalizadas hacer lo siguiente.
+```
+
+**Ubicación:** `src/Validators/ValidatorDtos.cs`
+
+```csharp
+using System.ComponentModel.DataAnnotations;
+
+namespace ProyectoDivine.Src.Validators;
+
+public class ValidatorDtos
+{
+    /// <summary>
+    /// Valida que la fecha de la función sea mayor a la fecha actual.
+    /// </summary>
+    public static ValidationResult? ValidateDateTime(string dateFuntion)
+    {
+        if (DateTime.TryParse(dateFuntion, out var date))
+        {
+            if (date.Date > DateTime.Now.Date)
+            {
+                return ValidationResult.Success;
+            }
+        }
+        return new ValidationResult("La fecha de la función debe ser mayor a la fecha actual.");
+    }
+}
+```
+### 9.2 Crear modelos para las reservas y sillas.
+Primero se deben de crear los modelos como se visualizan en.
+
+**Ubicación:** `src/Model/`
+### 9.3 Actualizar base de datos.
+Debemos agregar los modelos nuevos a la base de datos y aplicar las relaciones que deben de tener estos.
+
+**Ubicación:** `src/Db/ContextDb.cs`
+
+Por lo cual, las relaciones on las siguientes`:
+```csharp
+// Seat - Funtion (1-N)
+modelBuilder.Entity<Seat>()
+    .HasOne(s => s.Funtion)
+    .WithMany()
+    .HasForeignKey(s => s.FuntionId)
+    .OnDelete(DeleteBehavior.Cascade);
+
+// Reservation - User (1-N)
+modelBuilder.Entity<Reservation>()
+    .HasOne(r => r.User)
+    .WithMany()
+    .HasForeignKey(r => r.UserId);
+
+// Reservation - Funtion (1-N)
+modelBuilder.Entity<Reservation>()
+    .HasOne(r => r.Funtion)
+    .WithMany()
+    .HasForeignKey(r => r.FuntionId);
+
+// Reservation - Seat (N-N)
+modelBuilder.Entity<Reservation>()
+    .HasMany(r => r.SelectedSeats)
+    .WithMany()
+    .UsingEntity(j => j.ToTable("ReservationSeats"));
+```
+### 9.4 Crear y Ejecutar Migration
+
+```powershell
+# En Package Manager Console
+Add-Migration AddSeatsAndReservations
+Update-Database
+```
+
+### 9.5 Crear DTOs
+Se deben de crear los DTOs que están ubicados en
+
+**Ubicación:** `src/Dtos/Reservation/` 
+
+y
+
+**Ubicación:** `src/Dtos/Seat/
+
+### 9.6 Servicios e interfaces
+
+Primero crearemos el servicio de reserva donde de manera cotidiana.
+
+**Ubicación:** `src/Services/interfaces/IReservationServices.cs`
+
+para luego crear la implementación de este en el servicio, por razones pedagogicas, solo se realizara el servicio de agregar reserva dado que contiene materia de base de datos no vista.
+en está sección se veran transacciones las cuales son un conjunto de operaciones en la base de datos que se ejecutan como una unidad indivisible, garantizando que si algo falla, todos los cambios se revierten (Rollback). En este caso utilizaremos el nivel de aislamiento SERIALIZABLE para evitar que dos usuarios reserven el mismo asiento simultáneamente, asegurando la consistencia e integridad de los datos.
+
+**Ubicación:** `src/Services/ReservationServices.cs`
+### 9.7 Crear Controlador
+Crearemos el controlador como corresponde y obtendremos los datos desde el token para no reutilizar llamados a la base de datos.
+
+**Ubicación:** `src/Controller/ReservationController.cs`
+
+### 9.8 Publicar servicio
+Realizaremos la publicación correspondiente.
+
+**Ubicación:** `Program.cs`
+
+Agregar en `builder.Services`:
+```csharp
+builder.Services.AddScoped<IReservationServices, ReservationServices>();
+```
+### 9.9 Actualizar crear función
+Por ultimo, Actualizaremos el servicio de crear función para que cada función tenga sus propias sillas disponibles
+
+**Ubicación:** `src/Services/FuntionServices.cs`
