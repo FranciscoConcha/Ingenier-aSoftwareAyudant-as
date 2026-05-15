@@ -47,6 +47,9 @@ public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb c
             };
             await _contextDb.Functions.AddAsync(funtion);
             await _contextDb.SaveChangesAsync();
+            var seats = CreateSeatsForFuntion(funtion.Id);
+            await _contextDb.Seats.AddRangeAsync(seats);
+            await _contextDb.SaveChangesAsync();
             var response = await _sendGridEmailServices.SendEmailAsync("Francisco.concha.urquietaxd@gmail.com","Prueba",funtion.Name, funtion.ValidateFuntion);
             if(!response)
             {
@@ -67,6 +70,7 @@ public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb c
                     }
                 };
             }
+
             return new CreateFuntionResponse
             {
                 Message = "Función creada exitosamente",
@@ -92,6 +96,25 @@ public class FuntionServices(ICloudinaryServices cloudinaryServices, ContextDb c
                 Data = null!
             };
         }
+    }
+    private List<Seat> CreateSeatsForFuntion(int funtionId)
+    {
+        var asientos = new List<Seat>();
+        for (int i = 1; i <= 8; i++)
+        {
+            asientos.Add(new Seat { SeatNumber = $"A{i}", Section = "VIP Divine", Price = 85, Status = 0, FuntionId = funtionId });
+        }
+
+        for (int i = 1; i <= 20; i++){
+            asientos.Add(new Seat { SeatNumber = $"B{i}", Section = "Platea", Price = 45, Status = 0, FuntionId = funtionId });
+        }
+        for (int i = 1; i <= 18; i++){
+            asientos.Add(new Seat { SeatNumber = $"C{i}", Section = "Anfiteatro", Price = 28, Status = 0, FuntionId = funtionId });
+        }
+        for (int i = 1; i <= 12; i++){
+            asientos.Add(new Seat { SeatNumber = $"D{i}", Section = "Galería", Price = 18, Status = 0, FuntionId = funtionId });
+        }
+        return asientos;
     }
 }
 
