@@ -8,9 +8,10 @@ using ProyectoDivine.Src.Services.interfaces;
 
 namespace ProyectoDivine.Src.Services;
 
-public class ReservationServices(ContextDb contextDb) : IReservationServices
+public class ReservationServices(ContextDb contextDb, IPdfServices pdfServices) : IReservationServices
 {
     private readonly ContextDb _contextDb = contextDb;
+    private readonly IPdfServices _pdfServices = pdfServices;
     public Task<CreateReservationResponse> CancelReservationAsync(string reservationCode, int userId)
     {
         throw new NotImplementedException();
@@ -157,5 +158,77 @@ public class ReservationServices(ContextDb contextDb) : IReservationServices
     public Task<MyReservationsResponse> GetMyReservationsAsync(int userId)
     {
         throw new NotImplementedException();
+    }
+
+    public Task<PdfReservationResponse> GetReservatioPdfAsync(int userId, string reservationCode)
+    {
+        try
+        {
+            var reservation = _contextDb.Reservations
+                .Include(r => r.SelectedSeats)
+                .Include(r => r.Funtion)
+                .FirstOrDefault(r => r.ReservationCode == reservationCode);
+
+            if(reservation is null)
+            {
+                return Task.FromResult(new PdfReservationResponse
+                {
+                    Success = false,
+                    Message = "Reserva no encontrada.",
+                    Data = null!
+                });
+            }
+            if (reservation.UserId != userId)
+            {
+                return Task.FromResult(new PdfReservationResponse
+                {
+                    Success = false,
+                    Message = "No tiene permiso para acceder a esta reserva.",
+                    Data = null!
+                });
+            }
+
+            var funtion = _contextDb.Functions.FirstOrDefault(f => f.Id == reservation.FuntionId);
+            if(funtion == null)
+            {
+                return Task.FromResult(new PdfReservationResponse
+                {
+                    Success = false,
+                    Message = "Función asociada a la reserva no encontrada.",
+                    Data = null!
+                });
+            }
+            
+            var pdfDto = new PdfReservationDto
+            {
+                Id = reservation.Id,
+                ReservationCode = reservation.ReservationCode,
+                FunctionId = reservation.FuntionId,
+                FuncionTitle = funtion.Name,
+                SelectedSeats = [.. reservation.SelectedSeats.Select(s => new ReservationSeatDto
+                {
+                    Id = s.Id,
+                    SeatNumber = s.SeatNumber,
+                    Section = s.Section,
+                    Price = s.Price
+                })],
+                Status = reservation.Status,
+                FunctionDate = DateTime.Parse(reservation.Funtion.DateFunction),
+                TotalPrice = reservation.TotalPrice,
+                CreatedAt = reservation.CreatedAt
+            };
+            var pdfResponse = _pdfServices.GeneratePdfAsync(pdfDto).Result;
+            return Task.FromResult(pdfResponse);
+        }
+        catch(Exception ex)
+        {
+            return Task.FromResult(new PdfReservationResponse
+            {
+                Success = false,
+                Message = $"Error al generar el PDF: {ex.Message}",
+                Data = null!
+            });
+        }
+        
     }
 }
