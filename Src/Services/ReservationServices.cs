@@ -68,7 +68,7 @@ public class ReservationServices(ContextDb contextDb) : IReservationServices
                 {
                     var unavailableSeats = seatsSelected.Where(s=>s.Status != 0).ToList();
                     if (unavailableSeats.Count != 0)
-                    {
+                    {   
                         var SeatNumbers = string.Join(", ", unavailableSeats.Select(s => s.SeatNumber));
                         await transaction.RollbackAsync();
                         return new CreateReservationResponse
@@ -91,7 +91,7 @@ public class ReservationServices(ContextDb contextDb) : IReservationServices
                         FuntionId = request.FuntionId,
                         SelectedSeats = seatsSelected,
                         TotalPrice = totalPrice,
-                        Status = 0, // 0 = pendiente, 1 = confirmada
+                        Status = 0, // 0 = pendiente, 1 = confirmada.
                         CreatedAt = DateTime.UtcNow
                     };
                     foreach(var seat in seatsSelected)
@@ -107,7 +107,7 @@ public class ReservationServices(ContextDb contextDb) : IReservationServices
                         Id = reservation.Id,
                         ReservationCode = reservation.ReservationCode,
                         FuntionId = reservation.FuntionId,
-                        MovieTitle = funtion.Name,
+                        FuncionTitle = funtion.Name,
                         SelectedSeats = [.. seatsSelected.Select(s => new ReservationSeatDto
                         {
                             Id = s.Id,
@@ -147,7 +147,6 @@ public class ReservationServices(ContextDb contextDb) : IReservationServices
             };
         }
 
-        throw new NotImplementedException();
     }
 
     public Task<GetSeatsResponse> GetFuntionSeatsAsync(int funtionId)

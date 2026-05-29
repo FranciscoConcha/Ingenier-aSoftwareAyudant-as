@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace ProyectoDivine.Src.Dtos.Reservation;
 public class CreateReservation
 {
@@ -16,7 +18,7 @@ public class ReservationData
     public int Id { get; set; }
     public string ReservationCode { get; set; } = null!;
     public int FuntionId { get; set; }
-    public string MovieTitle { get; set; } = null!;
+    public string FuncionTitle { get; set; } = null!;
     public List<ReservationSeatDto> SelectedSeats { get; set; } = [];
     public decimal TotalPrice { get; set; }
     public int Status { get; set; }

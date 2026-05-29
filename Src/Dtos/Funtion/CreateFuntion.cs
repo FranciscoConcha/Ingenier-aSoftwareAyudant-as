@@ -11,9 +11,7 @@ public class CreateFuntion
     [Required(ErrorMessage = "La fecha de la función es obligatoria.")]
     public string DateFunction {get;set;} = null!;
     [Required(ErrorMessage = "La hora de la función es obligatoria.")]
-    [CustomValidation(typeof(CreateFuntion), nameof(ValidatorDtos.ValidateDateTime))]
     public string TimeFunction {get;set;} = null!;
-    [Required(ErrorMessage ="La imagen de la función es obligatoria.")]
     public IFormFile? Image {get;set;} 
 }
 

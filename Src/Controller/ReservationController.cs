@@ -35,7 +35,7 @@ public class ReservationController(IReservationServices reservationServices): Co
             // Devolvemos un Created con la ubicación de la nueva reserva utilizando el código de reserva generado
             // La ubicación se construye como "/api/reservation/{reservationCode}", donde reservationCode es el código único de la reserva creada
             // Esto permite que el cliente pueda acceder a la nueva reserva utilizando la URL proporcionada en la respuesta
-            return Created($"/api/reservation/{response.Data?.ReservationCode}", response);
+            return StatusCode(201,new {response});
         }catch(Exception ex)
         {
             return StatusCode(500, new CreateReservationResponse
