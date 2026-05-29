@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using ProyectoDivine.Src.Db;
 using ProyectoDivine.Src.Services;
 using ProyectoDivine.Src.Services.interfaces;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+QuestPDF.Settings.License = LicenseType.Community;
 
 
 // Add services to the container.
@@ -24,6 +26,7 @@ builder.Services.AddScoped<ICloudinaryServices, CloudinaryServices>();
 builder.Services.AddScoped<IFuntionServices, FuntionServices>();
 builder.Services.AddScoped<ISendGridEmailServices, SendGridEmailServices>();
 builder.Services.AddScoped<IReservationServices, ReservationServices>();
+builder.Services.AddScoped<IPdfServices, PdfServices>();
 
 // Punto 2 de Readme
 // Variable par obtener la cadena de conexión desde appsettings.json 
