@@ -8,4 +8,5 @@ public interface IReservationServices
     Task<CreateReservationResponse> CreateReservationAsync(int userId, CreateReservation request);
     Task<MyReservationsResponse> GetMyReservationsAsync(int userId);
     Task<CreateReservationResponse> CancelReservationAsync(string reservationCode, int userId);
+    Task<PdfReservationResponse> GetReservatioPdfAsync(int userId, string reservationCode);
 }
