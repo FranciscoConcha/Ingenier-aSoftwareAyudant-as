@@ -1,6 +1,7 @@
 namespace ProyectoDivine.Src.Controller;
 
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProyectoDivine.Src.Dtos.Reservation;
 using ProyectoDivine.Src.Services.interfaces;
@@ -10,7 +11,8 @@ public class ReservationController(IReservationServices reservationServices): Co
 {
     private readonly IReservationServices _reservationServices = reservationServices;
 
-    [HttpPost()]
+    [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateReservation([FromBody] CreateReservation request)
     {
         try
@@ -45,6 +47,40 @@ public class ReservationController(IReservationServices reservationServices): Co
                 Data = null!
             });
         }
-    }
 
+    }
+    [HttpGet("{code}/pdf")]
+    [Authorize]
+    public async Task<IActionResult> DownloadPdf(string code)
+    {
+        try
+        {
+            var userClaimId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;    
+            if(!int.TryParse(userClaimId,out int userId))
+            {
+                return Unauthorized(new PdfReservationResponse
+                {
+                    Success = false,
+                    Message = "Usuario no autenticado.",
+                    Data = null!
+                });
+            }
+            var response = await _reservationServices.GetReservatioPdfAsync(userId, code);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return File(response.Data, "application/pdf", $"reserva_{code}.pdf");
+            
+        }catch(Exception ex)
+        {
+            return StatusCode(500, new PdfReservationResponse
+            {
+                Success = false,
+                Message = $"Error al generar el PDF: {ex.Message}",
+                Data = null!
+            }
+            );
+        }
+    }
 }
