@@ -469,3 +469,47 @@ builder.Services.AddScoped<IReservationServices, ReservationServices>();
 Por ultimo, Actualizaremos el servicio de crear función para que cada función tenga sus propias sillas disponibles
 
 **Ubicación:** `src/Services/FuntionServices.cs`
+
+## Ayudantía 10
+### 10.1 Instalar paquetes para el pdf
+
+```bash
+dotnet add package QuestPDF
+```
+
+### 10.2 Crear Interfaz y servicio de pdf
+
+ver archivo ubicado en:
+**Ubicación:** `src/Services/Interfaces/IPdfServices.cs`
+
+para luego ver la implementación y creación del pdf en la ubicación de:
+
+**Ubicación:** `src/Services/PdfServices.cs`
+
+Este es el archivo modificable donde usted crearan un pdf a su gusto.
+
+### 10.3 Implementar pdf a servicios de reserva.
+
+Ver archivo ubicado en :
+**Ubicación:** `src/Services/ReservationServices.cs`
+
+### 10.4 Implementar controlador.
+
+ver achivo ubicado en:
+
+**Ubicación:** `src/Controller/ReservationController.cs`
+
+### 10.5 Actualizar program.cs
+
+en este publicaremos los servicios de pdf y agregaroms está lineas en especifico
+
+```csharp
+using QuestPDF.Infrastructure;
+
+var builder = WebApplication.CreateBuilder(args);
+QuestPDF.Settings.License = LicenseType.Community;
+```
+Esto nos dara la licencia gratuita del pdf a generar.
+
+
+
