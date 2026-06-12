@@ -1,9 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace ProyectoDivine.Src.Dtos.Payment;
 
 public class ProcessPaymentData
 {
     //Datos para la reserva
-    
     public string ReservationCode{get;set;} = string.Empty;
     /// Si se procesa directamente el págo al crear la reserva se puede agregar aquí pero no es necesario
     public int? Amount {get;set;}
@@ -17,10 +18,14 @@ public class ProcessPaymentData
 }
 public class DataResponseProcessPaymen
 {
+    [JsonPropertyName("codigo_movimiento")]
     public int MovementCod {get;set;}
+    [JsonPropertyName("codigo_reserva")]
     public string ReservationCode {get;set;} =string.Empty;
-    public int AmountCharged {get;set;}
-
+    [JsonPropertyName("monto_cobrado")]
+    public float AmountCharged {get;set;}
+    [JsonPropertyName("msg")]
+    public string MessageReponseApi {get;set;} = string.Empty;
 }
 public class ResponseProcessPayment
 {
