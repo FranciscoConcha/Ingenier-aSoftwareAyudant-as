@@ -3,7 +3,7 @@ namespace ProyectoDivine.Src.Model;
 public class Payment{
     public int Id {get;set;}
     public int Amount {get;set;}
-    public DateOnly DateTransaccion {get;set;}
+    public DateTime DateTransaccion {get;set;}
     /// <summary>
     /// Estados{
     ///     0:No realizado,
@@ -13,7 +13,8 @@ public class Payment{
     /// 
     /// </summary>
     public int Status {get;set;}
-    public int PaymentApiId {get;set;} 
+    //-1 Cuando no se realizo
+    public int PaymentApiId {get;set;}
     public int UserId{get;set;}
     public User User {get;set;} =null!;
     public int ReservationId {get;set;}
