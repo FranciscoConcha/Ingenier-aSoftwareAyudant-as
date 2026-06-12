@@ -44,7 +44,7 @@ public class PdfServices : IPdfServices
                                 .Text($"Entrada del teatro para la obra: {reservationData.FuncionTitle}")
                                 .FontSize(18)
                                 .Bold()
-                                .FontColor("#1a1a2e");
+                                .FontColor("");
 
                             // FECHA Y HORA + SALA
                             column.Item()
