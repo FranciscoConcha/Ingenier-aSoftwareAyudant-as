@@ -15,3 +15,16 @@ public class ProcessPaymentData
     public string NameHolder {get;set;} =string.Empty;
 
 }
+public class DataResponseProcessPaymen
+{
+    public int MovementCod {get;set;}
+    public string ReservationCode {get;set;} =string.Empty;
+    public int AmountCharged {get;set;}
+
+}
+public class ResponseProcessPayment
+{
+    public string Message { get; set; } = null!;
+    public bool Success { get; set; }
+    public DataResponseProcessPaymen Data { get; set; } = null!;
+}
