@@ -27,6 +27,8 @@ builder.Services.AddScoped<IFuntionServices, FuntionServices>();
 builder.Services.AddScoped<ISendGridEmailServices, SendGridEmailServices>();
 builder.Services.AddScoped<IReservationServices, ReservationServices>();
 builder.Services.AddScoped<IPdfServices, PdfServices>();
+builder.Services.AddScoped<IPaymentServices, PaymentServices>();
+builder.Services.AddHttpClient();
 
 // Punto 2 de Readme
 // Variable par obtener la cadena de conexión desde appsettings.json 
