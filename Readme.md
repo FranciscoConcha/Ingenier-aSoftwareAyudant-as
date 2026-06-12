@@ -513,3 +513,46 @@ Esto nos dara la licencia gratuita del pdf a generar.
 
 
 
+## Ayudantía 11
+### 11.1 Modificar el appSetting Con la data del la api
+
+## Configuración de la API de pagos
+
+La aplicación utiliza una API externa para procesar y anular pagos. Para ello, es necesario configurar las siguientes variables en el archivo `appsettings.json`:
+
+```json
+{
+  "ApiPayment": {
+    "BaseUrl": "https://idonosob2.pythonanywhere.com",
+    "HealthMethod": "/health",
+    "ProcessMethod": "/pago/procesar",
+    "CancelMethod": "/pago/anular"
+  }
+}
+```
+### 11.2 Modelo de Payment
+Se deben adaptar los modelos base de **Reservation** y **User** para relacionarlos con el modelo correspondiente de **Payment**.
+
+Para más detalles sobre los cambios realizados, revisar los commits asociados a la implementación de los modelos.
+
+### 11.3 Configuración de la base de datos
+Se deben agregar las relaciones correspondientes y publicar la tabla **Payment** mediante las migraciones de la aplicación.
+
+Revisar el archivo de configuración de la base de datos correspondiente.
+
+### 11.4 DTOs de Payment
+Se deben crear los DTOs correspondientes al módulo de **Payment**, incluyendo aquellos utilizados para el procesamiento interno y para representar las respuestas entregadas por la API externa de pagos.
+
+### 11.5 Servicios e interfaces
+Se deben crear los servicios y las interfaces correspondientes al módulo de **Payment**, siguiendo la estructura utilizada en el resto del proyecto.
+
+### 11.6 Controlador de Payment
+Se debe crear el controlador correspondiente a **Payment**, siguiendo las convenciones y la estructura utilizadas habitualmente en la aplicación.
+
+### 11.7 Registro de servicios en `Program.cs`
+Se deben registrar los servicios de **Payment** y el cliente HTTP correspondiente en el archivo `Program.cs`, de la siguiente forma:
+
+```csharp
+builder.Services.AddScoped<IPaymentServices, PaymentServices>();
+builder.Services.AddHttpClient();
+```
