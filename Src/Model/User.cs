@@ -18,6 +18,8 @@ public class User
     
     public Role Role { get; set; } = null!;
     public int RoleId { get; set; }
+    public List<Payment> Payments {get;set;}= [];
+    public List<Reservation> Reservations {get;set;} = [];
 
 }
 

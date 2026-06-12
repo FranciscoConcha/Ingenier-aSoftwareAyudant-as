@@ -11,4 +11,6 @@ public class Reservation
     public decimal TotalPrice { get; set; }
     public int Status { get; set; } = 0;
     public DateTime CreatedAt { get; set; }
+
+    public List<Payment> Payments {get;set;} =[]; 
 }
