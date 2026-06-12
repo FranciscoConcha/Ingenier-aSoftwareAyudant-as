@@ -8,7 +8,7 @@ public class Reservation
     public int FuntionId { get; set; }
     public Funtion Funtion { get; set; } = null!;
     public List<Seat> SelectedSeats { get; set; } = [];
-    public decimal TotalPrice { get; set; }
+    public int TotalPrice { get; set; }
     public int Status { get; set; } = 0;
     public DateTime CreatedAt { get; set; }
 
