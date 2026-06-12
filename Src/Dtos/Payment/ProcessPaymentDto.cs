@@ -26,5 +26,5 @@ public class ResponseProcessPayment
 {
     public string Message { get; set; } = null!;
     public bool Success { get; set; }
-    public DataResponseProcessPaymen Data { get; set; } = null!;
+    public DataResponseProcessPaymen? Data { get; set; } 
 }
