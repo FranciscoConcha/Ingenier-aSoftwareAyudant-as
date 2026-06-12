@@ -15,6 +15,7 @@ public class ContextDb(DbContextOptions<ContextDb> options) : DbContext(options)
     public DbSet<Funtion> Functions { get; set; } = null!;
     public DbSet<Seat> Seats { get; set; } = null!;
     public DbSet<Reservation> Reservations { get; set; } = null!;
+    public DbSet<Payment> Payments {get;set;} = null!;
 
 
 /// <summary>
@@ -62,5 +63,27 @@ public class ContextDb(DbContextOptions<ContextDb> options) : DbContext(options)
             .HasMany(r => r.SelectedSeats)
             .WithMany()
             .UsingEntity(j => j.ToTable("ReservationSeats"));
+
+        modelBuilder.Entity<Reservation>()
+            .HasMany(r => r.Payments)
+            .WithOne(p => p.Reservation)
+            .HasForeignKey(p => p.ReservationId)
+            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<User>()
+                .HasMany(u => u.Payments)
+                .WithOne(p => p.User)
+                .HasForeignKey(p => p.UserId);
+
+        modelBuilder.Entity<Payment>()
+            .HasOne(p => p.User)
+            .WithMany(u => u.Payments)
+            .HasForeignKey(p => p.UserId);
+
+        modelBuilder.Entity<Payment>()
+            .HasOne(p => p.Reservation)
+            .WithMany(r => r.Payments)
+            .HasForeignKey(p => p.ReservationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
     }   
 }
