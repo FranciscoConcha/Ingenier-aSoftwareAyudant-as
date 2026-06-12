@@ -83,7 +83,7 @@ public class ReservationServices(ContextDb contextDb, IPdfServices pdfServices) 
                     // Genera una id de reserva única y compacta para el código de reserva gracias al formato "N" se genera sin guiones y con mayúsculas
                     //Al final es un UUID con mayusculas y sin guiones.
                     var reservationCode = Guid.NewGuid().ToString("N")[..12].ToUpper();
-                    var totalPrice = seatsSelected.Sum(s => s.Price);
+                    var totalPrice = (int)seatsSelected.Sum(s => s.Price);
 
                     var reservation = new Reservation
                     {
@@ -95,12 +95,24 @@ public class ReservationServices(ContextDb contextDb, IPdfServices pdfServices) 
                         Status = 0, // 0 = pendiente, 1 = confirmada.
                         CreatedAt = DateTime.UtcNow
                     };
+      
                     foreach(var seat in seatsSelected)
                     {
                         seat.Status = 1; // Marcar como reservado
                     }
 
                     await _contextDb.Reservations.AddAsync(reservation);
+                    await _contextDb.SaveChangesAsync();
+                    var payment = new Payment
+                    {
+                        Amount= totalPrice,
+                        DateTransaccion = DateTime.UtcNow,
+                        Status = 0,
+                        PaymentApiId = -1,
+                        UserId =userId,
+                        ReservationId = reservation.Id
+                    };
+                    await _contextDb.Payments.AddAsync(payment);
                     await _contextDb.SaveChangesAsync();
                     await transaction.CommitAsync();
                     var reservationDto =new ReservationData
